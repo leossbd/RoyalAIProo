@@ -1,1 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RoyalAIPro</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#101827;color:white;font-family:Arial,sans-serif;padding:20px}
+header{text-align:center;padding:20px 0}
+h1{color:#f5c542;font-size:30px}
+.card{background:#1e2b40;padding:18px;border-radius:15px;margin:15px 0}
+input,textarea{width:100%;padding:13px;border:1px solid #52647d;border-radius:9px;background:#111b2c;color:white;margin:8px 0}
+button{width:100%;padding:15px;background:#e6ad27;color:#151515;border:0;border-radius:10px;font-weight:bold;font-size:17px}
+.result{color:#70e6a0;line-height:1.6}
+small{color:#aab8ca}
+</style>
+</head>
+<body>
+<header>
+<h1>👑 RoyalAIPro</h1>
+<p>Tu asistente inteligente de Clash Royale</p>
+</header>
+
+<div class="card">
+<h3>⚔️ Analizador de mazos</h3>
+<p><small>Escribe tus 8 cartas y su coste de elixir.</small></p>
+<textarea id="deck" rows="5">Gigante:5, Mosquetera:4, Mini P.E.K.K.A:4, Valquiria:4, Bola de Fuego:4, Descarga:2, Esbirros:3, Ejército de Esqueletos:3</textarea>
+<button onclick="analyze()">ANALIZAR MI MAZO</button>
+</div>
+
+<div class="card">
+<h3>🧠 Inteligencia RoyalAI</h3>
+<div id="result" class="result">Esperando análisis de tu mazo...</div>
+</div>
+
+<div class="card">
+<h3>🎯 Consejos de batalla</h3>
+<div id="tips">Analiza tu mazo para recibir recomendaciones.</div>
+</div>
+
+<script>
+function analyze(){
+const raw=document.getElementById('deck').value;
+const cards=raw.split(',').map(x=>x.trim()).filter(Boolean);
+const costs=cards.map(x=>Number(x.split(':').pop()));
+const valid=costs.every(x=>Number.isFinite(x)&&x>=1&&x<=10);
+
+if(cards.length!==8||!valid){
+document.getElementById('result').innerText=
+"Introduce exactamente 8 cartas con su coste. Ejemplo: Gigante:5";
+return;
+}
+
+const avg=costs.reduce((a,b)=>a+b,0)/8;
+let advice="";
+if(avg<2.8) advice="Mazo rápido. Aprovecha el ciclo y presiona constantemente.";
+else if(avg<3.8) advice="Mazo equilibrado. Defiende y busca oportunidades de contraataque.";
+else advice="Mazo pesado. Administra el elixir y evita gastar demasiado en ataque.";
+
+document.getElementById('result').innerHTML=
+"✅ Mazo analizado<br>🃏 Cartas: 8/8<br>💧 Elixir promedio: "+avg.toFixed(2)+"<br>📊 "+advice;
+
+document.getElementById('tips').innerText=
+avg>4?"No gastes todo tu elixir. Defiende primero y contraataca.":
+"Controla el ciclo de cartas y guarda tus hechizos para momentos importantes.";
+}
+</script>
+</body>
+</html>
 
